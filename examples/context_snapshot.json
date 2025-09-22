@@ -1,0 +1,34 @@
+// examples/context_snapshot.json
+{
+  "type": "context_snapshot",
+  "version": "1.0",
+  "timestamp": "2025-09-22T16:10:00Z",
+  "conversation_summary": {
+    "tokens_estimated": 8600,
+    "goals": [
+      "Keep context windows light by compressing images, conversation, and drafts",
+      "Use Lite image representation by default"
+    ],
+    "facts": [
+      "Images in GPT-5 add large token blocks; attention cost persists until dropped",
+      "Compact summaries average ~400 tokens; Ultra ~40"
+    ],
+    "decisions": [
+      "Default images: Compact representation=lite",
+      "Snapshot context before large compressions via Export command"
+    ]
+  },
+  "images": [
+    {
+      "id": "bm2025_2025-08-27_10-25-08",
+      "raw_tokens_estimated": 3000,
+      "summary_compact": "Three people beneath a wooden frame in desert; center has orange scarf; mountains beyond; friendly vibe."
+    }
+  ],
+  "notes": [
+    {"topic": "Menu defaults", "points": ["Compact+Lite images", "400-token conversation", "JSON notes"]}
+  ],
+  "code_snippets": [
+    {"final": "N/A (no code in this snapshot)", "drafts_count": 0}
+  ]
+}
