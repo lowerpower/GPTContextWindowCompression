@@ -1,0 +1,27 @@
+// examples/conversation_summary.json
+{
+  "type": "conversation_summary",
+  "version": "1.0",
+  "goals": [
+    "Provide on-the-fly compression commands for GPT-5",
+    "Minimize token drag while preserving meaning"
+  ],
+  "facts": [
+    "Images can be summarized at Ultra/Compact/Verbose levels",
+    "Lite image representation adds labels, scene graph, micro Q/A, OCR"
+  ],
+  "decisions": [
+    "Use Compact+Lite as default for images",
+    "Offer Export: context before compression"
+  ],
+  "constraints": [
+    "No direct token counter in Web UI",
+    "Embeddings/pHash/ANN are offline-only"
+  ],
+  "todos": [
+    "Optionally integrate offline pipeline for embeddings and pHash",
+    "Create printable cheat sheet"
+  ],
+  "open_questions": []
+}
+
