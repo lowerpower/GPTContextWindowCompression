@@ -1,0 +1,207 @@
+
+---
+
+```json
+{
+  "type": "context_compression_menu",
+  "version": "1.2",
+  "description": "Command set for on-the-fly context compression and export in ChatGPT/GPT-5, including Lite image representation.",
+  "defaults": {
+    "images_level": "Compact",
+    "images_representation": "lite",
+    "max_labels": 8,
+    "max_triples": 8,
+    "max_qa": 6,
+    "include_ocr": true,
+    "conversation_tokens": 400,
+    "notes_format": "JSON",
+    "export_format": "JSON",
+    "auto_multi_image": true,
+    "post_action_savings_report": true
+  },
+  "commands": [
+    {
+      "name": "images",
+      "trigger_examples": [
+        "Compress: images",
+        "Compress: images Ultra",
+        "Compress: images Compact representation=lite",
+        "Compress: images Verbose representation=summary"
+      ],
+      "parameters": {
+        "level": { "allowed": ["Ultra","Compact","Verbose"], "default": "Compact" },
+        "representation": { "allowed": ["summary","lite","full"], "default": "lite", "notes": "full is offline-only" },
+        "max_labels": { "type": "integer", "default": 8, "range": "0–32" },
+        "max_triples": { "type": "integer", "default": 8, "range": "0–32" },
+        "max_qa": { "type": "integer", "default": 6, "range": "0–16" },
+        "include_ocr": { "type": "boolean", "default": true }
+      },
+      "behavior": [
+        "Process all images present in the conversation (if auto_multi_image=true).",
+        "Generate prose at {level}.",
+        "If representation=lite, also emit labels, small scene graph, micro Q/A, OCR text.",
+        "Replace heavy image tokens with the emitted text structures.",
+        "Emit an estimated token savings report if post_action_savings_report=true."
+      ],
+      "output_schema_per_image": {
+        "summary": {
+          "type": "image_summary",
+          "version": "1.0",
+          "alt": "string",
+          "prose": { "ultra": "string", "compact": "string", "verbose_ref": "optional" }
+        },
+        "lite": {
+          "type": "image_card_lite",
+          "version": "1.0",
+          "id": "string",
+          "source_hint": "string",
+          "alt": "string",
+          "captions": { "ultra": "string", "compact": "string" },
+          "labels": ["string"],
+          "scene_graph": [["subject","relation","object"]],
+          "qa": [{"q":"string","a":"string"}],
+          "ocr": { "text": "string" }
+        }
+      },
+      "estimated_savings_percent": {
+        "Ultra_summary": 98,
+        "Compact_summary": 85,
+        "Compact_lite": 82
+      }
+    },
+    {
+      "name": "conversation",
+      "trigger_examples": ["Compress: conversation", "Compress: conversation 250"],
+      "parameters": {
+        "target_tokens": { "type": "integer", "default": 400, "range": "100–1000" }
+      },
+      "behavior": [
+        "Summarize entire conversation so far to ~{target_tokens} tokens.",
+        "Preserve goals, facts, decisions, constraints, open TODOs.",
+        "Prefer structured bullets/JSON to reduce token cost.",
+        "Emit an estimated token savings report if enabled."
+      ],
+      "output_schema": {
+        "type": "conversation_summary",
+        "version": "1.0",
+        "goals": ["string"],
+        "facts": ["string"],
+        "decisions": ["string"],
+        "constraints": ["string"],
+        "todos": ["string"],
+        "open_questions": ["string"]
+      },
+      "estimated_savings_percent": "70–90"
+    },
+    {
+      "name": "code",
+      "trigger_examples": ["Compress: code", "Compress: code attempts"],
+      "parameters": {},
+      "behavior": [
+        "Collapse all prior code drafts into a single clean final snippet.",
+        "Emit a bullet list of improvements/lessons learned.",
+        "Drop intermediate drafts from active context.",
+        "Emit an estimated token savings report if enabled."
+      ],
+      "output_schema": {
+        "type": "code_collapse",
+        "version": "1.0",
+        "final_snippet": "string",
+        "lessons_learned": ["string"],
+        "breaking_changes": ["string"]
+      },
+      "estimated_savings_percent": "high (varies with drafts)"
+    },
+    {
+      "name": "notes",
+      "trigger_examples": ["Compress: notes", "Compress: notes JSON", "Compress: notes bullets"],
+      "parameters": {
+        "format": { "allowed": ["JSON","bullets"], "default": "JSON" }
+      },
+      "behavior": [
+        "Convert running notes/brainstorms to {format} with no fluff.",
+        "Group by topic; prefer concise keys."
+      ],
+      "output_schema_json": {
+        "type": "notes_compact",
+        "version": "1.0",
+        "topics": [{ "title": "string", "points": ["string"] }]
+      },
+      "estimated_savings_percent": "50–75"
+    },
+    {
+      "name": "document",
+      "trigger_examples": ["Compress: document", "Compress: document outline", "Compress: document key points"],
+      "parameters": {
+        "mode": { "allowed": ["outline","summary","key points"], "default": "outline" }
+      },
+      "behavior": [
+        "Replace long-form pasted text with a compact {mode}.",
+        "Preserve structure (headings), arguments, and conclusions."
+      ],
+      "output_schema": {
+        "type": "doc_compact",
+        "version": "1.0",
+        "outline": [{ "heading": "string", "bullets": ["string"], "children": [] }]
+      },
+      "estimated_savings_percent": "70–95"
+    },
+    {
+      "name": "all",
+      "trigger_examples": ["Compress: all"],
+      "parameters": {
+        "images_level": { "default": "Compact" },
+        "images_representation": { "default": "lite" },
+        "conversation_tokens": { "default": 400 },
+        "notes_format": { "default": "JSON" }
+      },
+      "behavior": [
+        "Run images → {images_level} {images_representation}.",
+        "Run conversation → {conversation_tokens} tokens.",
+        "Run code → final + lessons.",
+        "Run notes → {notes_format}.",
+        "Emit a combined estimated token savings report."
+      ],
+      "estimated_savings_percent": "maximal; depends on content mix"
+    },
+    {
+      "name": "export",
+      "trigger_examples": ["Export: context", "Export: context JSON", "Export: context Markdown", "Export: context 2000"],
+      "parameters": {
+        "format": { "allowed": ["JSON","Markdown"], "default": "JSON" },
+        "target_tokens": { "type": "integer", "optional": true }
+      },
+      "behavior": [
+        "Snapshot the entire context window before compression.",
+        "Include conversation summary, images (with estimated raw tokens), notes, code.",
+        "Output in {format}.",
+        "If target_tokens is provided, compress snapshot to approximate size."
+      ],
+      "output_schema": {
+        "type": "context_snapshot",
+        "version": "1.0",
+        "timestamp": "ISO8601",
+        "conversation_summary": { "tokens_estimated": 0, "goals": [], "facts": [], "decisions": [] },
+        "images": [{ "id": "string", "raw_tokens_estimated": 0, "summary_compact": "string" }],
+        "notes": [{ "topic": "string", "points": ["string"] }],
+        "code_snippets": [{ "final": "string", "drafts_count": 0 }]
+      }
+    }
+  ],
+  "shorthand_aliases": {
+    "images": ["ci","imgc"],
+    "conversation": ["cc","convc"],
+    "code": ["ccode"],
+    "notes": ["cnotes"],
+    "document": ["cdoc"],
+    "all": ["call","compress all"],
+    "export": ["cexport","snapshot"]
+  },
+  "safety_notes": [
+    "Do not add identities to image outputs unless explicitly provided by the user.",
+    "Keep safety/legal disclaimers when summarizing documents."
+  ]
+}
+
+
+
