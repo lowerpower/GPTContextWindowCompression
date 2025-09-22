@@ -105,5 +105,52 @@ This menu gives you quick commands to compress on the fly while preserving usefu
   "ocr": {"text": ""}
 }
 
+** Conversation summary output (400 tokens target) **
+{
+  "type": "conversation_summary",
+  "version": "1.0",
+  "goals": ["..."],
+  "facts": ["..."],
+  "decisions": ["..."],
+  "constraints": ["..."],
+  "todos": ["..."],
+  "open_questions": ["..."]
+}
+
+** Export snapshot **
+{
+  "type": "context_snapshot",
+  "version": "1.0",
+  "timestamp": "ISO8601",
+  "conversation_summary": { "tokens_estimated": 0, "goals": [], "facts": [], "decisions": [] },
+  "images": [{ "id": "image-label", "raw_tokens_estimated": 3000, "summary_compact": "..." }],
+  "notes": [{"topic": "Topic","points":["p1","p2"]}],
+  "code_snippets": [{"final": "snippet","drafts_count": 0}]
+}
+
+Examples
+
+Default daily driver:
+Compress: images Compact representation=lite
+
+Super lean for many photos:
+Compress: images Ultra representation=lite max_labels=5 max_triples=5 max_qa=3
+
+Conversation reset:
+Compress: conversation 250
+
+Everything at once (with snapshot):
+Export: context JSON → Compress: all
+
+Best Practices
+
+Keep Compact+Lite as default — tiny, searchable, precise.
+
+Use Ultra when juggling lots of images.
+
+Keep Verbose out of the live window; archive it to files if needed.
+
+Export before major compression if you want an audit trail.
+
 
 
