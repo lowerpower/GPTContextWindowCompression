@@ -1,0 +1,24 @@
+// examples/image_card_lite.json
+{
+  "type": "image_card_lite",
+  "version": "1.0",
+  "id": "bm2025_2025-08-27_10-25-08",
+  "source_hint": "images/2025-08-27_10-25-08.jpg",
+  "alt": "Three smiling people under a wooden frame in a desert with mountains behind",
+  "captions": {
+    "ultra": "Three people at a desert event under a wooden frame, smiling.",
+    "compact": "Three people stand shoulder to shoulder beneath a simple wooden frame in a bright desert setting. Left wears a wide-brim hat and sunglasses with a chest strap; center wears round glasses and a bright scarf; right wears a light tee with sunglasses hanging from a neck cord. Mountains in the far distance under a partly cloudy sky; overall mood is friendly and casual."
+  },
+  "labels": ["person","wide-brim hat","sunglasses","scarf","wooden frame","desert","mountains"],
+  "scene_graph": [
+    ["person-left","wears","wide-brim hat"],
+    ["person-center","wears","orange scarf"],
+    ["structure","stands-in","desert"]
+  ],
+  "qa": [
+    {"q":"How many people?","a":"3"},
+    {"q":"Environment?","a":"Desert with wooden frame and distant mountains"}
+  ],
+  "ocr": {"text": ""}
+}
+
