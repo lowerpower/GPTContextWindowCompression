@@ -1,89 +1,125 @@
 # GPTContextWindowCompression
-Loadable into your ChatGPT memory, utilities to compress your context window to make it usable forever
+Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).
 
-# 🧩 Context Compression Menu (GPT-5)
 **Version:** 1.2 • **Status:** Stable
 
+---
+
 ## Overview
-GPT-5 context windows bloat fast (images, long chats, code drafts, pasted docs).  
-This menu gives you quick commands to compress on the fly while preserving useful state.
-
-**What’s new (v1.2)**
-- ✅ **Image “Lite” representation** (summary + labels + scene graph + micro Q/A + OCR) — all text, still tiny, much more searchable
-- ✅ **Export: context** command (JSON/Markdown snapshot before you compress)
-- ✅ Smarter defaults: **Compact + Lite** for images; batch all images; savings report after each run
+Context windows bloat fast. This menu gives you simple commands to compress on the fly while preserving useful state.
 
 ---
 
-## Quick Start
-- Set defaults once (optional):  
-  `Default images = Compact representation=lite; conversation = 400 tokens; notes = JSON`
-- Use the one-liner:  
-  `Compress: all`
+## 📦 Spec
+- **`compression-menu.json` (v1.2)** — full machine-readable command spec.
+  - **OpenAI GPT (chat.openai.com):** paste the file contents into a new chat, then send:  
+    **Store this in memory and activate these commands.**
+  - **Gemini (gemini.google.com):** paste the file contents into a new chat, then send:
+    ```
+    As my AI assistant, you are now a context compression tool. Store this JSON and use it to execute my commands. All commands start with "Compress:" or "Export:".
+    ```
+- **Memory tip (OpenAI GPT):** Save only a short activation note (command prefix + defaults) to memory; keep the full `compression-menu.json` in your repo and paste it when needed. Long JSON may not persist reliably in model memory.
+- **Gemini note:** Instructions are per-chat and may not persist; paste the short defaults each session.
 
 ---
 
-## Commands
+## 🚀 Quick Start — OpenAI GPT
+**(Optional) Defaults for this chat**
+> Remember: Recognize `Compress:` commands with defaults (images = Compact representation=lite; conversation = 400; notes = JSON; batch all images; show savings).
 
-### Images
-`Compress: images [Ultra | Compact | Verbose] [representation=summary|lite|full] [max_labels=8] [max_triples=8] [max_qa=6] [include_ocr=true|false]`  
-- **Default:** `Compact representation=lite max_labels=8 max_triples=8 max_qa=6 include_ocr=true`  
-- **Behavior:** Processes **all images in the conversation**; replaces heavy image tokens with text outputs.  
-- **Representations:**
-  - `summary` → prose only (Ultra/Compact/Verbose)
-  - `lite` → prose **+** labels, small scene graph, micro Q/A, OCR (text-only)
-  - `full` → *offline only* (embeddings, pHash, ANN index; not in ChatGPT UI)
-- **Savings vs ~3k-token image:**  
-  - Ultra (~40): ~99%  
-  - Compact (~400): ~85–90%  
-  - Compact+Lite (~480–550): ~82–85%
+**1) Snapshot (optional)**  
+> Export: context JSON  
+Save as `snapshots/YYYY-MM-DD/context_snapshot.json`.
 
-### Conversation
-`Compress: conversation [target=N tokens]`  
-- **Default:** `400`  
-- Rolls entire chat into a concise synopsis (goals, facts, decisions, TODOs).
+**2) Compress**  
+> Compress: all  
+You’ll get:
+- `image_card_lite` JSON per image (compact caption + labels + tiny scene graph + micro Q/A + OCR — all text)
+- `conversation_summary` JSON (~400 tokens)
+- a token-savings estimate *(approximate in Web UI)*
 
-### Code
-`Compress: code`  
-- Collapses drafts → **final clean snippet** + **lessons learned**; drops intermediate attempts.
+**3) Save outputs**
+- Combine image cards:  
+  > Combine all image_card_lite outputs above into a single JSON array named images.json. Return only that array.  
+  Save as `snapshots/YYYY-MM-DD/images.json`
+- Save the conversation summary as `snapshots/YYYY-MM-DD/summary.json`
 
-### Notes
-`Compress: notes [JSON | bullets]`  
-- **Default:** `JSON`  
-- Converts brainstorms into compact schema grouped by topic.
+**4) Reuse later (fresh chat)**  
+Paste your saved JSON and send:  
+> Use these JSON summaries as context (they replace the original images and long history).
 
-### Document
-`Compress: document [outline | summary | key points]`  
-- **Default:** `outline`  
-- Replaces long pasted docs with a structured abstract.
+**Note on speed:** A **soft roll** (same chat) improves organization now; speed improves after old tokens naturally scroll out. For **instant** snappiness, start a **new chat** and seed it only with your JSON summaries (a **hard roll**).
 
-### Export (snapshot before trimming)
-`Export: context [JSON | Markdown] [target=N tokens]`  
-- **Default:** `JSON`  
-- Creates a portable snapshot (conversation, images, notes, code). Optional token-capped export.
+---
 
-### All
-`Compress: all`  
-- Runs: Images → **Compact+Lite**, Conversation → **400**, Code → **final+lessons**, Notes → **JSON**.  
-- Emits an **estimated token savings report**.
+## 🚀 Quick Start — Gemini
+**(Optional) Defaults for this chat**  
+> Remember: For this conversation, recognize `Compress:` commands with defaults (images = Compact representation=lite; conversation = 400; notes = JSON; batch all images; show savings).
+
+**1) Snapshot (optional)**  
+> Export: context JSON  
+Save as `snapshots/YYYY-MM-DD/context_snapshot.json`.
+
+**2) Compress**  
+> Compress: all  
+You’ll get `image_card_lite` blocks + a `conversation_summary` + a savings estimate.
+
+**3) Save**
+- Images → `snapshots/YYYY-MM-DD/images.json` (combine as above)  
+- Conversation → `snapshots/YYYY-MM-DD/summary.json`
+
+**4) Reuse later**  
+> Use these JSON summaries as context (they replace the original images and long history).
+
+---
+
+## Commands (essentials)
+
+- **Images**  
+  `Compress: images [Ultra|Compact|Verbose] [representation=summary|lite] [max_labels=8] [max_triples=8] [max_qa=6] [include_ocr=true|false]`  
+  **Default:** `Compact representation=lite` (processes **all** images in the chat)  
+  **Representations:**  
+  - `summary` → prose only (Ultra/Compact/Verbose)  
+  - `lite` → prose **+** labels, small scene graph, micro Q/A, OCR *(text-only)*  
+  - `full` → **offline-only** (embeddings, pHash, ANN index; not supported in ChatGPT/Gemini Web UI)
+
+- **Conversation**  
+  `Compress: conversation [target=N]` (default `400`) — concise synopsis (goals, facts, decisions, TODOs).
+
+- **Code**  
+  `Compress: code` — final clean snippet + lessons; drops intermediate drafts.
+
+- **Notes**  
+  `Compress: notes [JSON|bullets]` (default `JSON`) — compact schema grouped by topic.
+
+- **Document**  
+  `Compress: document [outline|summary|key points]` (default `outline`) — structured abstract of long pasted text.
+
+- **Export**  
+  `Export: context [JSON|Markdown] [target=N]` — snapshot before trimming.
+
+- **All**  
+  `Compress: all` → Images **Compact+Lite**, Conversation **400**, Code **final+lessons**, Notes **JSON**; returns an estimated token-savings report.
 
 ---
 
 ## Token Savings (Typical)
 
-| Item                      | Before (tokens) | After (tokens) | % Saved |
-|--------------------------|------------------|----------------|---------|
-| Image (raw encoding)     | ~3,000           | Ultra ~40      | ~99%    |
-|                          |                  | Compact ~400   | ~85–90% |
-|                          |                  | Compact+Lite ~500 | ~82–85% |
-| Conversation long → 400  | 6–10k → 400      | ~90%           |
-| Notes → JSON             | variable         | ~½–¼ size      | ~50–75% |
+| Item                      | Before (tokens) | After (tokens)      | % Saved   |
+|--------------------------|------------------|---------------------|----------:|
+| Image (raw encoding)     | ~3,000           | Ultra ~40           | ~99%      |
+|                          |                  | Compact ~400        | ~85–90%   |
+|                          |                  | Compact+Lite ~500   | ~82–85%   |
+| Conversation long → 400  | 6–10k → 400      | 400                 | ~90%      |
+| Notes → JSON             | variable         | ~½–¼ size           | ~50–75%   |
+
+> **Web UI note:** savings are estimates. Exact token counts are available only via API usage metrics.
 
 ---
 
-## Outputs
+## Outputs (examples)
 
-**Image (Lite) example**
+**Image (Lite)**
 ```json
 {
   "type": "image_card_lite",
@@ -92,20 +128,23 @@ This menu gives you quick commands to compress on the fly while preserving usefu
   "source_hint": "filename-or-caption",
   "alt": "One-sentence alt text",
   "captions": { "ultra": "≤40 tokens", "compact": "≈400 tokens" },
-  "labels": ["hat","scarf","wooden-frame","desert","mountains"],
+  "labels": ["hat", "scarf", "wooden-frame", "desert", "mountains"],
   "scene_graph": [
-    ["person-left","wears","wide-brim hat"],
-    ["person-center","wears","orange scarf"],
-    ["structure","stands-in","desert"]
+    ["person-left", "wears", "wide-brim hat"],
+    ["person-center", "wears", "orange scarf"],
+    ["structure", "stands-in", "desert"]
   ],
   "qa": [
-    {"q":"How many people?","a":"3"},
-    {"q":"Environment?","a":"Desert with wooden frame and mountains"}
+    { "q": "How many people?", "a": "3" },
+    { "q": "Environment?", "a": "Desert with wooden frame and mountains" }
   ],
-  "ocr": {"text": ""}
+  "ocr": { "text": "" }
 }
 
+``` 
+
 ** Conversation summary output (400 tokens target) **
+```json
 {
   "type": "conversation_summary",
   "version": "1.0",
@@ -116,8 +155,10 @@ This menu gives you quick commands to compress on the fly while preserving usefu
   "todos": ["..."],
   "open_questions": ["..."]
 }
+```
 
 ** Export snapshot **
+```json
 {
   "type": "context_snapshot",
   "version": "1.0",
@@ -127,30 +168,52 @@ This menu gives you quick commands to compress on the fly while preserving usefu
   "notes": [{"topic": "Topic","points":["p1","p2"]}],
   "code_snippets": [{"final": "snippet","drafts_count": 0}]
 }
+```
 
-Examples
+---
 
-Default daily driver:
-Compress: images Compact representation=lite
+## (Optional) Persistence
 
-Super lean for many photos:
-Compress: images Ultra representation=lite max_labels=5 max_triples=5 max_qa=3
+### OpenAI GPT — one-time Memory (type in any chat)
+Remember: Recognize `Compress:` commands with defaults (images = Compact representation=lite; conversation = 400; notes = JSON; batch all images; show savings).
 
-Conversation reset:
-Compress: conversation 250
+### OpenAI GPT — Custom Instructions (Settings → Personalization)
 
-Everything at once (with snapshot):
-Export: context JSON → Compress: all
+**What should ChatGPT know about you?**
+Recognize commands starting with “Compress:” (images, conversation, code, notes, document, all) and run them with compact defaults. For images, if I say “Summarize [Ultra/Compact/Verbose] and drop tokens,” generate that summary and continue only with the text (no heavy image tokens). Prefer structured outputs; don’t add identities to images.
 
-Best Practices
+**How should ChatGPT respond?**
+Be concise and structured. After compression, show a brief estimated token-savings report. Default images to Compact; if I say representation=lite, include labels, tiny scene graph, micro Q/A, OCR (text only).
 
-Keep Compact+Lite as default — tiny, searchable, precise.
+> Tip: Save only this short note to Memory. Keep `compression-menu.json` in the repo and paste it when needed.
 
-Use Ultra when juggling lots of images.
-
-Keep Verbose out of the live window; archive it to files if needed.
-
-Export before major compression if you want an audit trail.
+### Gemini note
+Gemini doesn’t offer durable user-controlled memory; paste the short defaults at the start of each session.
 
 
+---
 
+
+## Soft vs. Hard Roll
+
+- **Soft roll (same chat):** organize now; speed improves later when old tokens scroll out.
+- **Hard roll (new chat):** paste only `images.json` + `summary.json` (and optional snapshot) → **instant** snappiness.
+
+## Privacy
+
+- Don’t add identities to image outputs unless you supply them explicitly.
+- Strip GPS/EXIF before committing.
+- Redact sensitive content in summaries.
+
+## Suggested save layout
+
+snapshots/
+└── YYYY-MM-DD/
+    ├── context_snapshot.json
+    ├── images.json
+    └── summary.json
+
+## One-line Cheat Sheet
+```
+Compress: images [level] [representation=summary|lite] | conversation [N] | code | notes [format] | document [mode] | all  •  Export: context [JSON|Markdown] [N]
+```
