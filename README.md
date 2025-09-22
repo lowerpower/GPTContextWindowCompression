@@ -207,11 +207,13 @@ Gemini doesn’t offer durable user-controlled memory; paste the short defaults 
 
 ## Suggested save layout
 
+```
 snapshots/
 └── YYYY-MM-DD/
     ├── context_snapshot.json
     ├── images.json
     └── summary.json
+```
 
 ## One-line Cheat Sheet
 ```
