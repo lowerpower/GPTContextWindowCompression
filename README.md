@@ -1,5 +1,5 @@
 # GPTContextWindowCompression
-Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).
+Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).  Supports both Soft Roll (same chat) and Hard roll (new chat) workflows.
 
 **Version:** 1.2 • **Status:** Stable
 
