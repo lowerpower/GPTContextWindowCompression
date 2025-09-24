@@ -1,4 +1,23 @@
 # GPTContextWindowCompression
+<p align="center">
+  <!-- Latest release version (needs a Release) -->
+  <a href="https://github.com/lowerpower/GPTContextWindowCompression/releases">
+    <img alt="Release" src="https://img.shields.io/github/v/release/lowerpower/GPTContextWindowCompression?sort=semver">
+  </a>
+  <!-- License badge (reads LICENSE file) -->
+  <a href="https://github.com/lowerpower/GPTContextWindowCompression/blob/main/LICENSE">
+    <img alt="License" src="https://img.shields.io/github/license/lowerpower/GPTContextWindowCompression">
+  </a>
+  <!-- Stars (social proof) -->
+  <a href="https://github.com/lowerpower/GPTContextWindowCompression/stargazers">
+    <img alt="GitHub stars" src="https://img.shields.io/github/stars/lowerpower/GPTContextWindowCompression">
+  </a>
+  <!-- CI badge (if you add .github/workflows/json-lint.yml) -->
+  <a href="https://github.com/lowerpower/GPTContextWindowCompression/actions/workflows/json-lint.yml">
+    <img alt="JSON Lint" src="https://github.com/lowerpower/GPTContextWindowCompression/actions/workflows/json-lint.yml/badge.svg">
+  </a>
+</p>
+
 Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).  Supports both Soft Roll (same chat) and Hard roll (new chat) workflows.
 
 **Version:** 1.2 • **Status:** Stable
