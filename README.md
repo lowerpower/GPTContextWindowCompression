@@ -18,6 +18,11 @@
   </a>
 </p>
 
+[![Blog post](https://img.shields.io/badge/Blog-Rolling_Compression_for_GPT_%26_Gemini-0B7285?logo=read.cv&logoColor=white)](https://yourblog.com/gpt-context-rolling-compression?utm_source=github&utm_medium=readme&utm_campaign=v1_2)
+
+> Prefer the narrative overview? **Read the blog post** → https://yourblog.com/gpt-context-rolling-compression
+
+
 Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).  Supports both Soft Roll (same chat) and Hard roll (new chat) workflows.
 
 **Version:** 1.2 • **Status:** Stable
@@ -26,6 +31,10 @@ Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by com
 
 ## Overview
 Context windows bloat fast. This menu gives you simple commands to compress on the fly while preserving useful state.
+
+## Platforms
+
+Works in **ChatGPT** and **Gemini** as documented. Also usable in **Claude**, **Perplexity** and other **LLM's** with the same per-chat pattern as **Gemini** (paste the menu/defaults each session, then use `Compress:` / `Export:` and seed new chats with `images.json` + `summary.json`). Web UIs show *estimated* savings only.
 
 ---
 
@@ -238,3 +247,11 @@ snapshots/
 ```
 Compress: images [level] [representation=summary|lite] | conversation [N] | code | notes [format] | document [mode] | all  •  Export: context [JSON|Markdown] [N]
 ```
+
+## Further reading
+- Blog: **Make Your Chat Context Feel Infinite**  
+  https://yourblog.com/gpt-context-rolling-compression?utm_source=github&utm_medium=readme&utm_campaign=v1_2
+- Teaser: *image_card_medium* (coming soon)
+
+
+
