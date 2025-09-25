@@ -250,7 +250,7 @@ Compress: images [level] [representation=summary|lite] | conversation [N] | code
 
 ## Further reading
 - Blog: **Make Your Chat Context Feel Infinite**  
-  https://yourblog.com/gpt-context-rolling-compression?utm_source=github&utm_medium=readme&utm_campaign=v1_2
+  https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2
 - Teaser: *image_card_medium* (coming soon)
 
 
