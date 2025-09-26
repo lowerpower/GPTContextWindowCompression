@@ -18,10 +18,9 @@
   </a>
 </p>
 
-[![Blog post](https://img.shields.io/badge/Blog-Rolling_Compression_for_GPT_%26_Gemini-0B7285?logo=read.cv&logoColor=white)](https://yourblog.com/gpt-context-rolling-compression?utm_source=github&utm_medium=readme&utm_campaign=v1_2)
+[![Blog post](https://img.shields.io/badge/Blog-Rolling_Compression_for_GPT_%26_Gemini-0B7285?logo=read.cv&logoColor=white)](https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2)
 
-> Prefer the narrative overview? **Read the blog post** → https://yourblog.com/gpt-context-rolling-compression
-
+> Prefer the narrative overview? **Read the blog post** → https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2
 
 Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).  Supports both Soft Roll (same chat) and Hard roll (new chat) workflows.
 
