@@ -16,11 +16,17 @@
   <a href="https://github.com/lowerpower/GPTContextWindowCompression/actions/workflows/json-lint.yml">
     <img alt="JSON Lint" src="https://github.com/lowerpower/GPTContextWindowCompression/actions/workflows/json-lint.yml/badge.svg">
   </a>
+  <!-- Blog post badge -->
+  <a href="https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2">
+    <img alt="Blog post" src="https://img.shields.io/badge/Blog-Rolling_Compression_for_GPT_%26_Gemini-0B7285?logo=read.cv&logoColor=white">
+  </a>
 </p>
 
-[![Blog post](https://img.shields.io/badge/Blog-Rolling_Compression_for_GPT_%26_Gemini-0B7285?logo=read.cv&logoColor=white)](https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2)
-
-> Prefer the narrative overview? **Read the blog post** → https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2
+<p align="center">
+  Prefer the narrative overview?  
+  <b>Read the blog post →</b>  
+  <a href="https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2">https://blog.mycal.net/infinite-ai-chat-windows/?utm_campaign=github_readme_v1_2</a>
+</p>
 
 Utilities you can load into ChatGPT/GPT-5 (and Gemini) to keep chats fast by compressing heavy context (images, long chats, code drafts, pasted docs) into tiny JSON summaries you can save and reuse. This **workflow** lets you roll projects forward indefinitely by exporting + reloading summaries (the model’s built-in window size does not change).  Supports both Soft Roll (same chat) and Hard roll (new chat) workflows.
 
